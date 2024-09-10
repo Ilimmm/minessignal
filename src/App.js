@@ -12,11 +12,18 @@ const VideoBackground = styled.video`
   z-index: -1; /* Размещаем видео за другими элементами */
 `;
 
-
+// Стили для контейнера масштабирования
+const ScaleContainer = styled.div`
+  transform: scale(0.6); /* Уменьшаем размер всего экрана */
+  transform-origin: top left; /* Точка масштабирования в верхнем левом углу */
+  width: 170%; /* Увеличиваем ширину, чтобы компенсировать масштабирование */
+  height: 150%; /* Увеличиваем высоту, чтобы компенсировать масштабирование */
+  overflow: hidden; /* Прячет все, что выходит за пределы контейнера */
+`;
 
 // Стили для заголовка
 const Title = styled.h1`
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   color: #fff;
   text-align: center;
   margin: 20px 0;
@@ -60,8 +67,6 @@ const Star = styled.div`
   opacity: 0; /* Начальное значение opacity */
   animation: fadeIn 0.5s forwards; /* Анимация появления звезды */
 `;
-
-
 
 function App() {
   const [stars, setStars] = useState([]); // Состояние для звездочек
@@ -112,53 +117,55 @@ function App() {
 
   return (
     <div className="App">
-    <VideoBackground autoPlay muted loop>
+      <VideoBackground autoPlay muted loop>
         <source src="/videos/space.mp4" type="video/mp4" />
         Ваш браузер не поддерживает видео.
       </VideoBackground>
-      <Title>HYDRA SIGNALS</Title>
-      <GridContainer>
-        {[...Array(25).keys()].map((_, index) => {
-          const isStar = stars.some(star => star.index === index);
-          return (
-            squaresVisible[index] ? (
-              <Square key={index} />
-            ) : isStar ? (
-              <Star
-                key={index}
-                style={{
-                  animationDelay: `${stars.find(star => star.index === index).delay}ms`,
-                }}
-              >
-                <GoStarFill />
-              </Star>
-            ) : (
-              <Square key={index} style={{ opacity: 0 }} /> // Пустое место для неиспользуемых квадратов
-            )
-          );
-        })}
-      </GridContainer>
-      <button
-  onClick={generateStars}
-  disabled={isGenerating} // Блокируем кнопку, пока идет генерация
-  style={{
-    width: 'calc(30% - 40px)', // Ширина кнопки с учетом отступов контейнера
-    padding: '15px', // Вертикальные отступы для кнопки
-    fontSize: '2rem',
-    fontWeight: 'bold', // Жирный шрифт
-    color: '#fff',
-    backgroundColor: isGenerating ? 'rgba(33, 137, 166, 0.5)' : '#2189A6', // Прозрачный цвет кнопки при активности
-    border: 'none',
-    borderRadius: '12px', // Округленные углы
-    cursor: isGenerating ? 'not-allowed' : 'pointer', // Изменяем курсор, когда кнопка заблокирована
-    display: 'block',
-    margin: '20px auto', // Центрируем кнопку по горизонтали
-    boxSizing: 'border-box', // Учитываем отступы в ширину и высоту
-    transition: 'background-color 0.3s ease' // Плавное изменение цвета фона
-  }}
->
-  {isGenerating ? 'GENERATING...' : 'GET SIGNAL'}
-</button>
+      <ScaleContainer>
+        <Title>HYDRA SIGNALS</Title>
+        <GridContainer>
+          {[...Array(25).keys()].map((_, index) => {
+            const isStar = stars.some(star => star.index === index);
+            return (
+              squaresVisible[index] ? (
+                <Square key={index} />
+              ) : isStar ? (
+                <Star
+                  key={index}
+                  style={{
+                    animationDelay: `${stars.find(star => star.index === index).delay}ms`,
+                  }}
+                >
+                  <GoStarFill />
+                </Star>
+              ) : (
+                <Square key={index} style={{ opacity: 0 }} /> // Пустое место для неиспользуемых квадратов
+              )
+            );
+          })}
+        </GridContainer>
+        <button
+          onClick={generateStars}
+          disabled={isGenerating} // Блокируем кнопку, пока идет генерация
+          style={{
+            maxWidth: "80%", // Ширина кнопки с учетом отступов контейнера
+            padding: '15px', // Вертикальные отступы для кнопки
+            fontSize: '3rem',
+            fontWeight: 'bold', // Жирный шрифт
+            color: '#fff',
+            backgroundColor: isGenerating ? 'rgba(33, 137, 166, 0.5)' : '#2189A6', // Прозрачный цвет кнопки при активности
+            border: 'none',
+            borderRadius: '12px', // Округленные углы
+            cursor: isGenerating ? 'not-allowed' : 'pointer', // Изменяем курсор, когда кнопка заблокирована
+            display: 'block',
+            margin: '20px auto', // Центрируем кнопку по горизонтали
+            boxSizing: 'border-box', // Учитываем отступы в ширину и высоту
+            transition: 'background-color 0.3s ease' // Плавное изменение цвета фона
+          }}
+        >
+          {isGenerating ? 'GENERATING...' : 'GET SIGNAL'}
+        </button>
+      </ScaleContainer>
       <style>
         {`
           @keyframes fadeIn {
